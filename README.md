@@ -33,17 +33,43 @@ A comprehensive private resort booking management system with admin panel, featu
 - **Recharts** for data visualization
 - **React Calendar** for availability view
 
-## 🚀 Quick Start (Recommended: Docker)
+## 🚀 Quick Start (Recommended: Vercel)
 
-The easiest way to deploy is using Docker - no manual installation required!
+The easiest way to deploy is using **Vercel** - serverless deployment with free hosting!
+
+### Prerequisites
+- Vercel account (free tier)
+- PostgreSQL database (Vercel Postgres, Railway, Supabase, or Neon)
+- Gmail account (for email notifications)
+- JotForm account (for form integration)
+
+### 1. One-Click Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/thetz25/mcdonnellresortsbooking)
+
+Or deploy manually:
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+```
+
+**See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for detailed instructions.**
+
+---
+
+## 🐳 Alternative: Docker Deployment
+
+If you prefer self-hosting on your own VPS, use Docker:
 
 ### Prerequisites
 - Docker 20.10+ and Docker Compose 2.0+
 - VPS/Server with 2GB+ RAM
-- Gmail account (for email notifications)
-- JotForm account (for form integration)
 
-### 1. Deploy with Docker (One Command)
+### Deploy with Docker
 
 ```bash
 # Upload to your VPS and run:

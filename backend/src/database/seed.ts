@@ -84,9 +84,4 @@ export const seedDatabase = async (): Promise<void> => {
   }
 };
 
-// Run seed if this file is executed directly
-if (require.main === module) {
-  seedDatabase()
-    .then(() => process.exit(0))
-    .catch(() => process.exit(1));
-}
+export default seedDatabase;

@@ -18,7 +18,6 @@ import reportRoutes from './routes/report.routes';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Rate limiting
 const limiter = rateLimit({
@@ -29,7 +28,7 @@ const limiter = rateLimit({
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN || '*',
   credentials: true
 }));
 app.use(morgan('dev'));
@@ -58,19 +57,31 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Start server
-const startServer = async () => {
-  try {
-    await connectDatabase();
-    
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-};
+// For local development
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  
+  const startServer = async () => {
+    try {
+      await connectDatabase();
+      
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+      });
+    } catch (error) {
+      console.error('❌ Failed to start server:', error);
+      process.exit(1);
+    }
+  };
 
-startServer();
+  startServer();
+} else {
+  // For Vercel: Connect to database before handling requests
+  connectDatabase().catch(error => {
+    console.error('❌ Database connection failed:', error);
+  });
+}
+
+// Export for Vercel serverless
+export default app;
