@@ -143,10 +143,10 @@ setup_environment() {
         print_success "Environment file already exists"
     fi
     
-    # Source the environment variables
-    set -a
-    source .env
-    set +a
+    # docker-compose reads .env automatically - no need to source
+    # Environment ready
+    # (docker-compose will read .env)
+    
 }
 
 # Check for port conflicts
