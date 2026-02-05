@@ -1,0 +1,64 @@
+version: '3.8'
+
+# Development Docker Compose Configuration
+# Use this for local development with hot-reload
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: resort-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: resort_booking
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - resort-dev-network
+
+  # Backend API (Development with hot-reload)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: resort-backend-dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: resort_booking
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: dev_secret_key_not_for_production
+      JWT_EXPIRES_IN: 24h
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_USER: 
+      EMAIL_PASS: 
+      EMAIL_FROM: 
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/package.json:/app/package.json
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - resort-dev-network
+    command: npm run dev
+
+volumes:
+  postgres_dev_data:
+    driver: local
+
+networks:
+  resort-dev-network:
+    driver: bridge
